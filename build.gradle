@@ -167,5 +167,13 @@ signing {
     sign publishing.publications
 }
 
-tasks.findByName('publishJarPublicationToMavenLocal').dependsOn(tasks.findByName('signUberjarPublication'))
-tasks.findByName('publishUberjarPublicationToMavenLocal').dependsOn(tasks.findByName('signJarPublication'))
+
+// Avoid depency warning
+tasks.withType(PublishToMavenRepository) {
+    dependsOn(tasks.findByName('signJarPublication'))
+    dependsOn(tasks.findByName('signUberjarPublication'))
+}
+tasks.withType(PublishToMavenLocal) {
+    dependsOn(tasks.findByName('signJarPublication'))
+    dependsOn(tasks.findByName('signUberjarPublication'))
+}
